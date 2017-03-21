@@ -1,0 +1,54 @@
+.app {
+    font-family: Roboto;
+    height: 100vh;
+    max-width: 100%;
+    font-size: 1.1em;
+    background-color: black;
+    color: white;
+    text-align: center;
+    h2 {
+        text-transform: uppercase;
+        font-weight: bold;
+        color: #191919;
+        margin-bottom: 20px;
+    }
+    p {
+        margin: 10px 0 14px;
+    }
+
+    .container{
+        padding-bottom: 30px;
+    }
+
+    .background {
+        position: fixed;
+        z-index: -1000;
+        width: 100vw;
+        height: 100%;
+        background-size: 100% 100%;
+    }
+    header {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        z-index: 1030;
+    }
+    footer {
+        min-height: 130px;
+        padding: 15px;
+    }
+    .content {
+        min-height: 100vh;
+        margin-bottom: -130px;
+        background-color: white;
+        color: black;
+        padding-top: 90px;
+        padding-bottom: 130px;
+        text-align: left;
+    }
+    .page {
+        animation-name: fadeIn;
+        animation-duration: .3s;
+    }
+}
