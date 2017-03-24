@@ -1,24 +1,23 @@
 import { connect } from 'react-redux'
 import Home from './Home'
-import {fetchProjects, newProject, openNewProjectModal, joinToProject} from '../../modules/Projects'
+import {fetchProjects, newProject, fetchUserProjects, fetchOtherProjects} from '../../modules/Projects'
 import {fetchUsersList} from '../../modules/User'
+import {fetchTimers} from '../../modules/Timers'
 
 const mapActionCreators = ({
   fetchProjects,
-  newProject,
-  openNewProjectModal,
+  fetchUserProjects,
+  fetchOtherProjects,
   fetchUsersList,
-  joinToProject
+  newProject
 })
 const mapStateToProps = ({
   User: {currentUser, users},
   Projects: {projects}
 }) => ({
   loggedIn: !!currentUser,
-  uid: currentUser && currentUser.uid,
-  displayName: currentUser && currentUser.displayName,
-  projects,
-  users
+  users,
+  projects
 })
 
 export default connect(mapStateToProps, mapActionCreators)(Home)

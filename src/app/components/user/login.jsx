@@ -39,24 +39,24 @@ class UserLogin extends Component {
                         <Alert bsStyle="warning">
                             {this.state.message}
                         </Alert>
-                    }    <h2>Logowanie do serwisu</h2>
+                    }    <h2>Sign In</h2>
                         <div className="form-group">
                             <label htmlFor="txtEmail">Email</label>
                             <input
-                            type="email" className="form-control" id="txtEmail" ref="email" placeholder="Wprowadź email"
+                            type="email" className="form-control" id="txtEmail" ref="email" placeholder="Type email"
                             name="email"
                             />
                         </div>
                         <div className="form-group">
-                            <label htmlFor="txtPass">Hasło</label>
+                            <label htmlFor="txtPass">Password</label>
                             <input
-                            type="password" className="form-control" id="txtPass" ref="password" placeholder="Wprowadź hasło"
+                            type="password" className="form-control" id="txtPass" ref="password" placeholder="Type password"
                             name="password"
                             />
                         </div>
                         <button type="submit" className="btn btn-default">Login</button>
-                        <Link style={{marginLeft: '30px'}} to="/reset">Zapomniałeś hasła?</Link>
-                        <Link style={{marginLeft: '30px'}} to="/register">Zarejestruj się</Link>
+                        <Link style={{marginLeft: '30px'}} to="/reset">Forgot password?</Link>
+                        <Link style={{marginLeft: '30px'}} to="/register">Registration</Link>
                     </form>
                 </Col>
             </Grid>

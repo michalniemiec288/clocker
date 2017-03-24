@@ -1,4 +1,4 @@
-import FireBaseTools from '../utils/firebase'
+import Firebase from '../utils/firebase'
 import createReducer from '../utils/createReducer'
 
 // ------------------------------------
@@ -20,42 +20,42 @@ export const FETCH_FIREBASE_USERS_LIST = 'FETCH_FIREBASE_USERS_LIST'
 
 export const registerUser = user => ({
   type: REGISTER_FIREBASE_USER,
-  payload: FireBaseTools.registerUser(user)
+  payload: Firebase.registerUser(user)
 })
 
 export const loginUser = user => ({
   type: LOGIN_FIREBASE_USER,
-  payload: FireBaseTools.loginUser(user)
+  payload: Firebase.loginUser(user)
 })
 
 export const fetchUser = () => ({
   type: FETCH_FIREBASE_USER,
-  payload: FireBaseTools.fetchUser()
+  payload: Firebase.fetchUser()
 })
 
 export const updateUser = user => ({
   type: UPDATE_FIREBASE_USER,
-  payload: FireBaseTools.updateUserProfile(user)
+  payload: Firebase.updateUserProfile(user)
 })
 
 export const changePassword = newPassword => ({
   type: CHANGE_FIREBASE_USER_PASSWORD,
-  payload: FireBaseTools.changePassword(newPassword)
+  payload: Firebase.changePassword(newPassword)
 })
 
 export const resetPasswordEmail = email => ({
   type: FIREBASE_PASSWORD_RESET_EMAIL,
-  payload: FireBaseTools.resetPasswordEmail(email)
+  payload: Firebase.resetPasswordEmail(email)
 })
 
 export const logoutUser = user => ({
   type: LOGOUT_FIREBASE_USER,
-  payload: FireBaseTools.logoutUser(user)
+  payload: Firebase.logoutUser(user)
 })
 
 export const fetchUsersList = () => ({
   type: FETCH_FIREBASE_USERS_LIST,
-  payload: FireBaseTools.getDatabaseReference('users').once('value').then(e => e.val())
+  payload: Firebase.getRef('users').once('value').then(e => e.val())
 })
 
 // ------------------------------------

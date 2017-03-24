@@ -20,7 +20,7 @@ class ResetPassword extends Component {
             if (data.payload.errorCode) {
                 this.setState({ message: data.payload.errorMessage });
             } else {
-                this.setState({ message: 'Zaglądnij do skrzynki mailowej!' });
+                this.setState({ message: 'Check your e-mail!' });
             }
         });
     }
@@ -29,18 +29,19 @@ class ResetPassword extends Component {
         return (
             <Row className="content">
                 <Col sm={4} smOffset={4}>
+                    <h2>Password reset</h2>
                     <form role="form" onSubmit={this.onFormSubmit}>
                         {this.state.message &&
                             <Alert bsStyle="danger">{this.state.message}</Alert>
                         }
                         <div className="form-group">
-                            <label htmlFor="txtEmail">Podaj adres email</label>
+                            <label htmlFor="txtEmail">Type your email:</label>
                             <input
                             type="email" className="form-control" id="txtEmail" ref="email" placeholder="email"
                             name="email"
                         />
                         </div>
-                        <button type="submit" className="btn btn-default btn-block">Reset hasła</button>
+                        <button type="submit" className="btn btn-default btn-block">Reset</button>
                     </form>
                 </Col>
             </Row>

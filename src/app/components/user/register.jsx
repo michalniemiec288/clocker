@@ -33,10 +33,10 @@ class UserRegister extends Component {
     render() {
         return (
             <Row className="content">
-                <Col md={6} mdOffset={3}>
+                <Col md={4} mdOffset={4}>
                     <form id="frmRegister" role="form" onSubmit={this.onFormSubmit}>
                         {this.state.message && <Alert bsStyle='warning'>{this.state.message}</Alert>}
-                        <h2>Rejestracja</h2>
+                        <h2>Registration</h2>
                         <div className="form-group">
                             <label htmlFor="txtRegEmail">Email</label>
                             <input
@@ -45,13 +45,13 @@ class UserRegister extends Component {
                             />
                         </div>
                         <div className="form-group">
-                            <label htmlFor="txtRegPass">Hasło</label>
+                            <label htmlFor="txtRegPass">Password</label>
                             <input
-                            type="password" className="form-control" ref="password" id="txtPass" placeholder="Hasło"
+                            type="password" className="form-control" ref="password" id="txtPass" placeholder="Password"
                             name="password"
                             />
                         </div>
-                        <button type="submit" className="btn btn-default">Zarejestruj</button>
+                        <button type="submit" className="btn btn-default">Submit</button>
                     </form>
                 </Col>
             </Row>

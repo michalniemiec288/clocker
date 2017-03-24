@@ -3,7 +3,6 @@
     height: 100vh;
     max-width: 100%;
     font-size: 1.1em;
-    background-color: black;
     color: white;
     text-align: center;
     h2 {
@@ -16,10 +15,6 @@
         margin: 10px 0 14px;
     }
 
-    .container{
-        padding-bottom: 30px;
-    }
-
     .background {
         position: fixed;
         z-index: -1000;
@@ -28,10 +23,6 @@
         background-size: 100% 100%;
     }
     header {
-        position: absolute;
-        top: 0;
-        right: 0;
-        left: 0;
         z-index: 1030;
     }
     footer {
@@ -39,16 +30,15 @@
         padding: 15px;
     }
     .content {
-        min-height: 100vh;
-        margin-bottom: -130px;
         background-color: white;
         color: black;
-        padding-top: 90px;
-        padding-bottom: 130px;
         text-align: left;
     }
     .page {
         animation-name: fadeIn;
         animation-duration: .3s;
+    }
+    .panel-primary {
+        margin-top: 15px;
     }
 }

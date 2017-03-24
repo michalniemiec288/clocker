@@ -8,7 +8,7 @@ class Header extends Component {
     this.props.fetchUser()
   }
   componentWillReceiveProps() {
-	this.props.fetchUser()
+	  this.props.fetchUser()
   }
   render () {
 		const {loggedIn, logoutUser} = this.props
@@ -27,8 +27,8 @@ class Header extends Component {
 					<Navbar.Collapse>
 					{loggedIn && 
 						<Nav pullRight>
-							<li><Link to="/profile">Profil</Link></li>
-							<li><Link to="/logout" onClick={logoutUser}>Wyloguj</Link></li>
+							<li><Link to="/profile">Profile</Link></li>
+							<li><Link to="/logout" onClick={logoutUser}>Sign out</Link></li>
 						</Nav>
 					}
 					</Navbar.Collapse>

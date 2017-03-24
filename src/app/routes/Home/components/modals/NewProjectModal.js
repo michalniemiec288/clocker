@@ -7,13 +7,13 @@ const NewProjectModal = ({ show, handleHide, handleSubmit, pristine, reset, subm
   <Modal show={show} >
     <Modal.Header>
       <Modal.Title>
-        <h2>Dodaj projekt</h2>
+        <h2>Add Project</h2>
       </Modal.Title>
     </Modal.Header>
     <form>
       <Modal.Body>
         <div>
-          <label>Nazwa: </label>
+          <label>Name: </label>
           <div>
             <Field
               name="name"
@@ -23,7 +23,7 @@ const NewProjectModal = ({ show, handleHide, handleSubmit, pristine, reset, subm
           </div>
         </div>
         <div>
-          <label>Opis: </label>
+          <label>Description: </label>
           <div>
             <Field
               name="description"
@@ -32,7 +32,7 @@ const NewProjectModal = ({ show, handleHide, handleSubmit, pristine, reset, subm
           </div>
         </div>
           <Field
-            name="members"
+            name="users"
             component="input"
             type="text"
             hidden
@@ -45,9 +45,9 @@ const NewProjectModal = ({ show, handleHide, handleSubmit, pristine, reset, subm
             handleSubmit()
             handleHide()
           }}>
-          Dodaj
+          Add
         </Button>
-        <Button onClick={handleHide} >Zamknij</Button>
+        <Button onClick={handleHide} >Close</Button>
       </Modal.Footer>
     </form>
   </Modal>

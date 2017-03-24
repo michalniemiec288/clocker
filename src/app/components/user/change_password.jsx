@@ -33,22 +33,22 @@ class ChangePassword extends Component {
     render() {
       return (
         <form id="ChangePassword" role="form" onSubmit={this.onFormSubmit}>
-          <h4> Zmiana hasła </h4>
+          <h4> Change password </h4>
           <h5> {this.state.message} </h5>
           <div className="form-group">
-            <label htmlFor="password"> Nowe hasło </label>
+            <label htmlFor="password"> New password: </label>
             <input type="password" className="form-control"
               name="password" ref="password" id="password" 
             />
           </div>
           <div className="form-group">
-            <label htmlFor="repeatPassword"> Powtórz hasło: </label>
+            <label htmlFor="repeatPassword"> Repeat password: </label>
             <input type="password" className="form-control"
               name="repeatPassword" ref="repeatPassword" id="repeatPassword" 
             />
 
           </div>
-          <button type="submit" className="btn btn-primary">Zapisz</button>
+          <button type="submit" className="btn btn-primary">Save</button>
         </form>
     );
   }

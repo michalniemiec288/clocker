@@ -1,10 +1,11 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Provider } from 'react-redux'
-import { createStore, applyMiddleware } from 'redux'
-import { Router, browserHistory } from 'react-router'
+import {Provider} from 'react-redux'
+import {createStore, applyMiddleware, compose} from 'redux'
+import {Router, browserHistory} from 'react-router'
 import ReduxPromise from 'redux-promise'
-import './assets/favicon.ico';
+import ReduxThunk from 'redux-thunk'
+import './assets/favicon.ico'
 
 import reducers from './modules'
 import routes from './routes'
@@ -12,15 +13,14 @@ import routes from './routes'
 // bundling styles
 import './bundle.scss'
 
-const composeEnhancers =
-  typeof window === 'object' &&
-  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?   
-    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__() : f => f
-
-const createStoreWithMiddleware = applyMiddleware(ReduxPromise)(createStore)
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+const store = createStore(reducers, composeEnhancers(
+  applyMiddleware(ReduxThunk),
+  applyMiddleware(ReduxPromise),
+))
 
 const provider =
-  <Provider store={createStoreWithMiddleware(reducers, composeEnhancers)}>
+  <Provider store={store}>
     <Router history={browserHistory} routes={routes} />
   </Provider>
 

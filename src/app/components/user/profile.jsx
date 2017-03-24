@@ -27,7 +27,7 @@ class UserProfile extends Component {
       if (data.payload.errorCode) {
         this.setState({ message: data.payload.errorMessage })
       } else {
-        this.setState({ message: 'Zmiany zostały zapisane!'})
+        this.setState({ message: 'Changes saved!'})
       }
     })
   }
@@ -40,7 +40,7 @@ class UserProfile extends Component {
     return (
       <Grid className="content">
         <Row>
-          <h2>Ustawienia profilu</h2>
+          <h2>Settings</h2>
           <Col sm={6}>
             <form id="frmProfile" role="form" onSubmit={this.onFormSubmit}>
               <p>{this.state.message}</p>
@@ -53,10 +53,10 @@ class UserProfile extends Component {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="displayName">Imię: </label>
+                <label htmlFor="displayName">Name: </label>
                 <input
                 type="text" defaultValue={this.props.currentUser.displayName}
-                className="form-control" ref="displayName" id="displayName" placeholder="Imię"
+                className="form-control" ref="displayName" id="displayName" placeholder="Name"
                 name="displayName"
                 />
               </div>
@@ -65,7 +65,7 @@ class UserProfile extends Component {
                 className="form-control" ref="uid" id="uid"
                 name="uid"
                 />
-              <button type="submit" className="btn btn-primary">Zapisz</button>
+              <button type="submit" className="btn btn-primary">Save</button>
             </form>
           </Col>
           <Col sm={6}>
