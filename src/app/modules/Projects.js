@@ -1,6 +1,7 @@
 import Firebase from '../utils/firebase'
 import createReducer from '../utils/createReducer'
 import {show} from 'redux-modal'
+import {isNotEmpty} from '../utils/object'
 
 // ------------------------------------
 // Constants
@@ -9,7 +10,9 @@ import {show} from 'redux-modal'
 const FETCH_PROJECTS = 'FETCH_PROJECTS'
 const NEW_PROJECT = 'NEW_PROJECT'
 const JOIN_TO_PROJECT = 'JOIN_TO_PROJECT'
+const REDUCE_USERS_PROJECTS = 'REDUCE_USERS_PROJECTS'
 const USER_PROJECTS = 'USER_PROJECTS'
+const REDUCE_OTHERS_PROJECTS = 'REDUCE_OTHERS_PROJECTS'
 const OTHER_PROJECTS = 'OTHER_PROJECTS'
 
 // ------------------------------------
@@ -21,30 +24,30 @@ export const fetchProjects = () => ({
   payload: Firebase.getRef('projects').once('value').then(e => e.val())
 })
 
-export const fetchUserProjects = () => (dispatch, getState) => {
-  const {User: {currentUser: {uid}}, Projects: {projects}} = getState()
-  const UserProjects = []
-
-  Object.keys(projects).map(pid =>
-    checkProject(projects[pid], uid) && UserProjects.push(projects[pid]))
-  dispatch ({
-    type: USER_PROJECTS,
-    UserProjects
-  })
+export const fetchUserProjects = projects => (dispatch, getState) => {
+  const {currentUser: {uid}} = getState().User
+  
+  dispatch({type: REDUCE_USERS_PROJECTS})
+  isNotEmpty(projects) && Object.keys(projects).map(pid =>
+    projects[pid] && Object.keys(projects[pid].users).includes(uid) &&
+    dispatch ({
+      type: USER_PROJECTS,
+      project: {pid, ...projects[pid]}
+    })
+  )
 }
 
-export const fetchOtherProjects = () => (dispatch, getState) => {
-  const {User: {currentUser: {uid}}, Projects: {projects}} = getState()
-  const OtherProjects = []
+export const fetchOtherProjects = projects => (dispatch, getState) => {
+  const {currentUser: {uid}} = getState().User
 
-  Object.keys(projects).map(pid =>
+  dispatch({type: REDUCE_OTHERS_PROJECTS})
+  isNotEmpty(projects) && Object.keys(projects).map(pid =>
     projects[pid] && !Object.keys(projects[pid].users).includes(uid) &&
-    OtherProjects.push(projects[pid])
+    dispatch ({
+      type: OTHER_PROJECTS,
+      project: {pid, ...projects[pid]}
+    })
   )
-  return ({
-    type: OTHER_PROJECTS,
-    OtherProjects
-  })
 }
 
 export const newProject = form => (dispatch, getState) => {
@@ -54,19 +57,17 @@ export const newProject = form => (dispatch, getState) => {
   Firebase.getRef(`projects/${pid}`).set(form)
   Firebase.getRef(`projects/${pid}/users/${uid}`).set(true)
   Firebase.getRef(`users/${uid}/projects/${pid}`).set(true)
-  return ({
-    type: NEW_PROJECT,
-  })
+  dispatch({type: NEW_PROJECT})
+  dispatch(fetchProjects())
 }
 
-export const joinToProject = pid => {
+export const joinToProject = pid => (dispatch, getState) => {
   const {currentUser: {uid}} = getState().User
 
   Firebase.getRef(`projects/${pid}/users/${uid}`).set(true)
   Firebase.getRef(`users/${uid}/projects/${pid}`).set(true)
-  return ({
-    type: JOIN_TO_PROJECT,
-  })
+  dispatch({type: JOIN_TO_PROJECT})
+  dispatch(fetchProjects())
 }
 
 // ------------------------------------
@@ -74,13 +75,6 @@ export const joinToProject = pid => {
 // ------------------------------------
 
 export const openNewProjectModal = () => show('newProjectModal')
-
-const checkProject = (project, uid) =>
-  typeof project === 'object' &&
-  typeof project.users === 'object' &&
-  Object.keys(project.users).includes([uid]) &&
-  Object(project).hasOwnProperty(name) &&
-  Object(project).hasOwnProperty(description)
 
 // ------------------------------------
 // Reducer
@@ -93,7 +87,15 @@ export const initialState = {
 }
 
 export default createReducer(initialState, {
-  [FETCH_PROJECTS]: (state, {payload}) => ({projects: payload}),
-  [USER_PROJECTS]: (state, {UserProjects}) => ({UserProjects}),
-  [OTHER_PROJECTS]: (state, {OtherProjects}) => ({OtherProjects})
+  [FETCH_PROJECTS]: (state, {payload}) => ({
+    projects: payload,
+  }),
+  [REDUCE_USERS_PROJECTS]: () => ({UserProjects: initialState.UserProjects}),
+  [USER_PROJECTS]: ({UserProjects}, {project}) => ({
+    UserProjects: [...UserProjects, project]
+  }),
+  [REDUCE_OTHERS_PROJECTS]: () => ({OtherProjects: initialState.OtherProjects}),
+  [OTHER_PROJECTS]: ({OtherProjects}, {project}) => ({
+    OtherProjects: [...OtherProjects, project]
+  }),
 })

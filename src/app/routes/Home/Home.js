@@ -1,25 +1,24 @@
 import React, {Component} from 'react'
+import {Grid, Button} from 'react-bootstrap'
 import Login from '../../components/user/login'
-import UserProjectsContainer from './components/UserProjects/'
-import OtherProjectsContainer from './components/OtherProjects/'
+import UserProjectsContainer from './components/UserProjects/index'
+import OtherProjectsContainer from './components/OtherProjects/index'
 import NewProjectModal from './components/modals/NewProjectModal'
+import {isNotEmpty} from '../../utils/object'
 
 class Home extends Component {
-  componentWillMount() {
-    this.props.fetchUsersList()
-    this.props.fetchProjects()
+  componentWillReceiveProps(next) {
+    const {currentUser, fetchUsersList} = this.props
+    currentUser !== next.currentUser && fetchUsersList()
   }
   render() {
-    const {loggedIn, users, projects, newProject, fetchProjects} = this.props
+    const {currentUser, users, newProject} = this.props
     return (
-      loggedIn && users
+      (isNotEmpty(currentUser) && isNotEmpty(users))
         ? <div>
             <UserProjectsContainer />
-            {/*<OtherProjectsContainer />*/}
-            <NewProjectModal
-              onSubmit={newProject}
-              onSubmitSuccess={fetchProjects}
-            />
+            <OtherProjectsContainer />
+            <NewProjectModal onSubmit={newProject} />
           </div>
         : <Login />
     )

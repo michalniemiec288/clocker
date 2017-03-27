@@ -1,19 +1,18 @@
 import { connect } from 'react-redux'
 import OtherProjects from './OtherProjects'
-import {fetchProjects, newProject, joinToProject} from '../../../../modules/Projects'
-import {fetchUsersList} from '../../../../modules/User'
+import {fetchProjects, fetchOtherProjects, joinToProject} from '../../../../modules/Projects'
 
 const mapActionCreators = ({
-  fetchUsersList,
+  fetchOtherProjects,
   fetchProjects,
   joinToProject
 })
 const mapStateToProps = ({
-  User: {currentUser, users},
-  Projects: {projects}
+  Projects: {OtherProjects, projects},
+  User: {users}
 }) => ({
-  uid: currentUser && currentUser.uid,
   projects,
+  OtherProjects,
   users
 })
 

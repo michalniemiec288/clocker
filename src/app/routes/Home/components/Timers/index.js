@@ -1,23 +1,20 @@
 import { connect } from 'react-redux'
 import Timers from './Timers'
-import {newTimer, stopTimer, fetchTimers} from '../../../../modules/Timers'
+import {newTimer, stopTimer, fetchTimers, fetchTimeline} from '../../../../modules/Timers'
 import moment from 'moment'
 
 const mapActionCreators = ({
   fetchTimers,
+  fetchTimeline,
   newTimer,
   stopTimer
 })
 
 const mapStateToProps = ({
-  User: {currentUser, users},
-  Timers: {timers, activeTid}
+  Timers: {timers, timelines}
 }) => ({
-  uid: currentUser && currentUser.uid,
-  displayName: currentUser && currentUser.displayName,
   timers,
-  activeTid,
-  activeTimer: timers && timers[activeTid] || null
+  timelines
 })
 
 export default connect(mapStateToProps, mapActionCreators)(Timers)

@@ -69,7 +69,11 @@ const Firebase = {
    * @returns {any|!firebase.Thenable.<*>|firebase.Thenable<any>}
    */
     loginUser: user => firebaseAuth.signInWithEmailAndPassword(user.email, user.password)
-        .then(userInfo => userInfo)
+        .then(userInfo => {
+            const {uid, email, displayName} = userInfo
+            firebaseDb.ref(`users/${uid}`).set({email, displayName})
+            return userInfo
+        })
         .catch(error => ({
             errorCode: error.code,
             errorMessage: error.message,

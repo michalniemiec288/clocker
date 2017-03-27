@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
-import {Grid, Row, Col, Panel, Button, ButtonGroup, Well} from 'react-bootstrap'
+import {Grid, Panel, Button, Well} from 'react-bootstrap'
+import UsersList from '../../../../components/user/UsersList'
 import TimersContainer from '../Timers/'
 
 const header = openNewProjectModal =>
@@ -12,32 +13,28 @@ const header = openNewProjectModal =>
   </div>
 
 class UserProjects extends Component {
-  componentDidUpdate () {
-    const {fetchUserProjects, UserProjects} = this.props
-    !UserProjects && fetchUserProjects()
+  componentWillMount() {
+    this.props.fetchProjects()
+  }
+  componentWillReceiveProps(next) {
+    const {projects, fetchUserProjects} = this.props
+    projects !== next.projects && fetchUserProjects(next.projects)
   }
   render() {
     const {UserProjects, users, openNewProjectModal} = this.props
     return (
       <Grid className='content'>
         <Panel header={header(openNewProjectModal)} bsStyle="primary">
-          {UserProjects
-            ? UserProjects.map((project, i) =>
-                <Panel
-                  key={i}
-                  header={project.name}
-                  bsStyle="info">
-                  <Well bsStyle='sm'>{project.description}</Well>
-                  {/*<TimersContainer projectTids={project.timers} />*/}
-                  {/*{users && Object.keys(project.users).map((uid, j) =>
-                    <Button style={{marginLeft: 10}} bsStyle="info" key={j}>
-                      {users[uid].displayName || users[uid].email}
-                    </Button>
-                  )}*/}
-                </Panel>
-              )
-            : <span>Loading...</span>
-          }
+          {UserProjects && UserProjects.map((project, i) =>
+            <Panel
+              key={i}
+              header={project.name}
+              bsStyle="info" >
+              <Well bsStyle='sm'>{project.description}</Well>
+              <TimersContainer project={project} />
+              <UsersList users={users} uids={Object.keys(project.users)} />
+            </Panel>
+          )}
         </Panel>
       </Grid>
     )

@@ -7,11 +7,11 @@ class Header extends Component {
   componentWillMount() {
     this.props.fetchUser()
   }
-  componentWillReceiveProps() {
-	  this.props.fetchUser()
+  componentWillUpdate() {
+    this.props.fetchUser()
   }
   render () {
-		const {loggedIn, logoutUser} = this.props
+		const {currentUser, logoutUser} = this.props
 		return (
 			<header>
 				<Navbar>
@@ -25,7 +25,7 @@ class Header extends Component {
 						</Navbar.Brand>
 					</Navbar.Header>
 					<Navbar.Collapse>
-					{loggedIn && 
+					{currentUser && 
 						<Nav pullRight>
 							<li><Link to="/profile">Profile</Link></li>
 							<li><Link to="/logout" onClick={logoutUser}>Sign out</Link></li>
