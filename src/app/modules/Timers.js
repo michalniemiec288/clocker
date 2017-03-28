@@ -2,16 +2,17 @@ import Firebase from '../utils/firebase'
 import createReducer from '../utils/createReducer'
 import {show} from 'redux-modal'
 import moment from 'moment'
+import {isNotEmpty} from '../utils/object'
 
 // ------------------------------------
 // Constants
 // ------------------------------------
 
+export const COUNT_TIME = 'COUNT_TIME'
 export const FETCH_TIMERS = 'FETCH_TIMERS'
 export const REDUCE_TIMELINE = 'REDUCE_TIMELINE'
 export const ADD_TIMER_TO_PROJECT_TIMELINE = 'ADD_TIMER_TO_PROJECT_TIMELINE'
-export const NEW_TIMER = 'NEW_TIMER'
-export const STOP_TIMER = 'STOP_TIMER'
+export const ADD_TIMER = 'ADD_TIMER'
 
 // ------------------------------------
 // Actions
@@ -19,7 +20,7 @@ export const STOP_TIMER = 'STOP_TIMER'
 
 export const fetchTimers = () => ({
   type: FETCH_TIMERS,
-  timers: Firebase.getRef(`timers`).once('value').then(e => e.val())
+  payload: Firebase.getRef(`timers`).once('value').then(e => e.val())
 })
 
 export const fetchTimeline = project => (dispatch, getState) => {
@@ -41,20 +42,19 @@ export const fetchTimeline = project => (dispatch, getState) => {
   )
 }
 
-export const newTimer = (uid, pid) => (dispatch, getState) => {
-  const {currentUser: {displayName}} = getState().User
-  const start = moment().format()
-  const tid = Firebase.getRef('timers').push().getKey()
 
-  Firebase.getRef(`timers/${tid}/start`).set(start)
+export const addTimer = ({uid, pid, start, end}) => (dispatch, getState) => {
+  const {currentUser: {displayName}} = getState().User
+  const tid = Firebase.getRef('timers').push().getKey()
+  const start = moment().format()
+  
+  Firebase.getRef(`timers/${tid}`).set({uid, pid, start, end})
   Firebase.getRef(`projects/${pid}/timers/${tid}`).set(true)
   Firebase.getRef(`users/${uid}/timers/${tid}`).set(true)
 
   dispatch({
-    type: NEW_TIMER,
-    tid,
-    pid,
-    start
+    type: ADD_TIMER,
+    timer: {tid, uid, pid, start, end}
   })
   dispatch({
     type: ADD_TIMER_TO_PROJECT_TIMELINE,
@@ -62,22 +62,13 @@ export const newTimer = (uid, pid) => (dispatch, getState) => {
     timer: {
       id: tid,
       start,
+      end,
       content: displayName
     }
   })
 }
 
-export const stopTimer = tid => dispatch => {
-  const end = moment().format()
 
-  Firebase.getRef(`timers/${tid}/end`).set(end)
-  dispatch({
-    type: STOP_TIMER,
-    tid,
-    end
-  })
-  dispatch(fetchTimeline())
-}
 
 // ------------------------------------
 // Helpers
@@ -89,19 +80,19 @@ export const stopTimer = tid => dispatch => {
 
 export const initialState = {
   timers: {}, // [tid]: {uid, pid, start, end}
-  timelines: {}  // [pid]: [...timelines[pid], { id, start, end, content }]
+  timelines: {},  // [pid]: [...timelines[pid], { id, start, end, content }]
 }
 
 export default createReducer(initialState, {
-  [FETCH_TIMERS]: (state, {timers}) => ({timers}),
-  [REDUCE_TIMELINE]: () => ({timeline: initialState.timeline}),
-  [ADD_TIMER_TO_PROJECT_TIMELINE]: ({timelines}, {pid, timer}) => ({
-    timelines: {...timelines, [pid]: [...timelines[pid], timer]}
+  [COUNT_TIME]: () => ({now: moment().format()}),
+  [FETCH_TIMERS]: (state, {payload}) => ({timers: payload}),
+  [REDUCE_TIMELINE]: () => ({timelines: initialState.timelines}),
+  [ADD_TIMER_TO_PROJECT_TIMELINE]: ({timelines}, {pid, timer: {id, start, end, content}}) => ({
+    timelines: isNotEmpty(timelines)
+      ? {...timelines, [pid]: [...timelines[pid], {id, start, end, content}]}
+      : {[pid]: [{id, start, end, content}]}
   }),
-  [NEW_TIMER]: (state, {tid, uid, pid, start}) => ({
-    timers: {[tid]: {uid, pid, start}}
-  }),
-  [STOP_TIMER]: (state, {tid, end}) => ({
-    timers: {[tid]: {end}}
+  [ADD_TIMER]: ({timers}, {timer: {tid, uid, pid, start, end}}) => ({
+    timers: {...timers, [tid]: {uid, pid, start, end}}
   })
 })

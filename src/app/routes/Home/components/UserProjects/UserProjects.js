@@ -1,7 +1,9 @@
 import React, {Component} from 'react'
-import {Grid, Panel, Button, Well} from 'react-bootstrap'
+import {Grid, Panel, Button, Well, Image} from 'react-bootstrap'
 import UsersList from '../../../../components/user/UsersList'
-import TimersContainer from '../Timers/'
+import TimersContainer from '../Timers/index'
+import CounterContainer from '../Counter/index'
+import {isNotEmpty} from '../../../../utils/object'
 
 const header = openNewProjectModal =>
   <div> Your Projects
@@ -11,24 +13,31 @@ const header = openNewProjectModal =>
       Add
     </Button>
   </div>
+const subHeader = (name, pid) =>
+  <span>
+    {name}
+    <CounterContainer pid={pid}/>
+  </span>
 
 class UserProjects extends Component {
   componentWillMount() {
     this.props.fetchProjects()
+    this.props.fetchTimers()
   }
   componentWillReceiveProps(next) {
-    const {projects, fetchUserProjects} = this.props
+    const {projects, fetchUserProjects, timers, fetchTimers, timelines, fetchTimeline} = this.props
     projects !== next.projects && fetchUserProjects(next.projects)
+    timers !== next.timers && fetchTimers()
   }
   render() {
-    const {UserProjects, users, openNewProjectModal} = this.props
+    const {UserProjects, users, timelines, openNewProjectModal} = this.props
     return (
       <Grid className='content'>
         <Panel header={header(openNewProjectModal)} bsStyle="primary">
           {UserProjects && UserProjects.map((project, i) =>
             <Panel
               key={i}
-              header={project.name}
+              header={subHeader(project.name, project.pid)}
               bsStyle="info" >
               <Well bsStyle='sm'>{project.description}</Well>
               <TimersContainer project={project} />
