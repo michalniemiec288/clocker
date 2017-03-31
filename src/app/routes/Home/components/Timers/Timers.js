@@ -1,25 +1,31 @@
 import React, {Component} from 'react'
 import {Button} from 'react-bootstrap'
 import moment from 'moment'
+import Timeline from 'react-calendar-timeline'
 import Statistics from '../Statistics/Statistics'
-import Timeline from './Timeline'
 
 class Timers extends Component {
-  componentWillMount() {
-    const {fetchTimers, fetchTimeline, project} = this.props
-    fetchTimers()
-    fetchTimeline(project)
+  componentWillReceiveProps(next) {
+    const {timers, fetchTimeline, fetchTimers, project} = this.props
+    timers !== next.timers && fetchTimeline(project) 
   }
   render() {
-    const {project, timelines, fetchTimeline} = this.props
+    const {timelines, project, displayName} = this.props
 
     return (
       <div>
-        <Timeline
-          pid={project.pid}
-          timeline={timelines[project.pid]}
-          fetchTimeline={fetchTimeline}
-        />
+        {timelines && timelines[project.pid] &&
+          <Timeline
+            groups={[
+              {id: 1, title: displayName}
+            ]}
+            items={timelines[project.pid]}
+            defaultTimeStart={moment().add(-6, 'hour')}
+            defaultTimeEnd={moment().add(6, 'hour')}
+            sidebarWidth={0}
+          />
+        }
+        
         Your timers:
         Other timers:
         Statistics:

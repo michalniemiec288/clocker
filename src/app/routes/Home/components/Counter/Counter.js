@@ -33,13 +33,19 @@ class Counter extends Component {
                 }}
                 src={stopBtn}
                 style={{height: 30, marginLeft: 30, marginRight: 10}} />
-              {moment.utc(moment(now).diff(moment(start), 'milliseconds', true)).format('HH:mm:ss')}
+              {moment
+                .utc(moment(now)
+                  .add(1, 'second')
+                  .diff(moment(start), 'milliseconds'))
+                .format('HH:mm:ss')
+              }
             </span>
           : <span>
               <Image
                 onClick={() => this.setState({start: moment().format()})}
                 src={playBtn}
-                style={{height: 30, marginLeft: 30, marginRight: 10}} />
+                style={{height: 30, marginLeft: 30, marginRight: 10}}
+              />
             </span>
         }
       </span>

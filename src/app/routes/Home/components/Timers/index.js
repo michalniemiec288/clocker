@@ -11,10 +11,13 @@ const mapActionCreators = ({
 })
 
 const mapStateToProps = ({
-  Timers: {timers, timelines}
+  Timers: {timers, timelines},
+  User: {displayName, uid}
 }) => ({
   timers,
-  timelines
+  timelines,
+  displayName,
+  uid
 })
 
 export default connect(mapStateToProps, mapActionCreators)(Timers)

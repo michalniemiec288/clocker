@@ -13,10 +13,10 @@ const header = openNewProjectModal =>
       Add
     </Button>
   </div>
-const subHeader = (name, pid) =>
+const subHeader = (name, pid, key) =>
   <span>
     {name}
-    <CounterContainer pid={pid}/>
+    <CounterContainer pid={pid} key={key}/>
   </span>
 
 class UserProjects extends Component {
@@ -37,7 +37,7 @@ class UserProjects extends Component {
           {UserProjects && UserProjects.map((project, i) =>
             <Panel
               key={i}
-              header={subHeader(project.name, project.pid)}
+              header={subHeader(project.name, project.pid, i)}
               bsStyle="info" >
               <Well bsStyle='sm'>{project.description}</Well>
               <TimersContainer project={project} />
