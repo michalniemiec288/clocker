@@ -1,5 +1,6 @@
 import Firebase from '../utils/firebase'
 import createReducer from '../utils/createReducer'
+import createRelation from '../utils/createRelation'
 import {show} from 'redux-modal'
 import moment from 'moment'
 import {isNotEmpty} from '../utils/object'
@@ -8,10 +9,10 @@ import {isNotEmpty} from '../utils/object'
 // Constants
 // ------------------------------------
 
-export const FETCH_TIMERS = 'FETCH_TIMERS'
-export const REDUCE_TIMELINE = 'REDUCE_TIMELINE'
-export const ADD_TIMER_TO_PROJECT_TIMELINE = 'ADD_TIMER_TO_PROJECT_TIMELINE'
-export const ADD_TIMER = 'ADD_TIMER'
+export const FETCH_TIMERS = 'FETCH TIMERS'
+export const REDUCE_TIMELINE = 'REDUCE TIMELINE'
+export const ADD_TIMER_TO_PROJECT_TIMELINE = 'ADD TIMER TO PROJECT TIMELINE'
+export const ADD_TIMER = 'ADD TIMER'
 
 // ------------------------------------
 // Actions
@@ -23,10 +24,15 @@ export const fetchTimers = () => ({
 })
 
 export const fetchTimeline = project => (dispatch, getState) => {
-  const {Timers: {timers}, User: {currentUser: {displayName, uid}}} = getState()
+  const {
+    Timers: {timers},
+    User: {currentUser: {displayName, uid}}
+  } = getState()
 
-  Object(project).hasOwnProperty('timers') && Object.keys(project.timers).map((tid, i) =>
-    timers[tid] && dispatch({
+  Object(project).hasOwnProperty('timers') &&
+  Object.keys(project.timers).map((tid, i) =>
+    timers[tid] &&
+    dispatch({
       type: ADD_TIMER_TO_PROJECT_TIMELINE,
       pid: project.pid,
       timer: {
@@ -55,12 +61,13 @@ export const startTimer = ({uid, pid, start}) => (dispatch, getState) => {
 
 export const addTimer = ({uid, pid, start, end}) => (dispatch, getState) => {
   const {currentUser: {displayName}} = getState().User
-
   
   Firebase.getRef(`timers/${tid}`).set({uid, pid, start, end})
-  Firebase.getRef(`projects/${pid}/timers/${tid}`).set(true)
-  Firebase.getRef(`users/${uid}/timers/${tid}`).set(true)
 
+  createRelation([
+    `projects/${pid}/timers/${tid}`,
+    `users/${uid}/timers/${tid}`
+  ])
   dispatch({
     type: ADD_TIMER_TO_PROJECT_TIMELINE,
     pid,
@@ -83,12 +90,6 @@ export const addTimer = ({uid, pid, start, end}) => (dispatch, getState) => {
   })
 }
 
-
-
-// ------------------------------------
-// Helpers
-// ------------------------------------
-
 // ------------------------------------
 // Reducer
 // ------------------------------------
@@ -99,16 +100,18 @@ export const initialState = {
 }
 
 export default createReducer(initialState, {
-  [FETCH_TIMERS]: (state, {payload}) => ({timers: payload}),
-  [REDUCE_TIMELINE]: () => ({timelines: initialState.timelines}),
+  [FETCH_TIMERS]: (state, {payload}) => ({
+    timers: payload
+  }),
+  [REDUCE_TIMELINE]: () => ({
+    timelines: initialState.timelines
+  }),
   [ADD_TIMER_TO_PROJECT_TIMELINE]: ({timelines}, {pid, timer: {id, group, start_time, end_time, title}}) => ({
     timelines: isNotEmpty(timelines)
-    ? {
-        ...timelines,
-        [pid]: [
-          ...timelines[pid],
+    ? {...timelines,
+        [pid]: [...timelines[pid],
           {
-            id: (timelines[pid][timelines[pid].length-1].id)+1,
+            id: (timelines[pid][timelines[pid].length - 1].id) + 1,
             group,
             start_time,
             end_time,
@@ -119,6 +122,8 @@ export default createReducer(initialState, {
     : {[pid]: [{id: 0, group, start_time, end_time, title}]}
   }),
   [ADD_TIMER]: ({timers}, {timer: {tid, uid, pid, start, end}}) => ({
-    timers: {...timers, [tid]: {uid, pid, start, end}}
+    timers: {...timers,
+      [tid]: {uid, pid, start, end}
+    }
   })
 })

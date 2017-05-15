@@ -1,5 +1,6 @@
 import Firebase from '../utils/firebase'
 import createReducer from '../utils/createReducer'
+import createRelation from '../utils/createRelation'
 import {show} from 'redux-modal'
 import moment from 'moment'
 import {fetchTimers} from './Timers'
@@ -83,9 +84,13 @@ export const initialState = {
 
 export default createReducer(initialState, {
   [USER_IN_PROJECT]: (state, {timers, total, daily, pid}) => ({
-    userTimeInProjects: { [pid]: {timers, total, daily} }
+    userTimeInProjects: {
+      [pid]: {timers, total, daily}
+    }
   }),
   [TOTAL_IN_PROJECT]: (state, {total, daily, pid}) => ({
-    totalTimeInProjects: { [pid]: {total, daily} }
+    totalTimeInProjects: {
+      [pid]: {total, daily}
+    }
   })
 })

@@ -25,17 +25,16 @@ class Timers extends Component {
             sidebarWidth={0}
           />
         }
-        
-        Your timers:
+        {/* Your timers:
         Other timers:
         Statistics:
-        {/*<Statistics
+        <Statistics
           pid={pid}
           uid={uid}
           projectTids={projectTids}
           userTids={userTids}
           timers={timers}
-        />*/}
+        /> */}
       </div>
     )
   }

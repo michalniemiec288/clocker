@@ -19,7 +19,8 @@ const NewProjectModal = ({ show, handleHide, handleSubmit, pristine, reset, subm
               name="name"
               component="input"
               type="text"
-              style={{width: '100%'}}/>
+              style={{width: '100%'}}
+            />
           </div>
         </div>
         <div>
@@ -28,7 +29,8 @@ const NewProjectModal = ({ show, handleHide, handleSubmit, pristine, reset, subm
             <Field
               name="description"
               component="textarea"
-              style={{width: '100%', height: 100}}/>
+              style={{width: '100%', height: 100}}
+            />
           </div>
         </div>
           <Field
@@ -47,7 +49,9 @@ const NewProjectModal = ({ show, handleHide, handleSubmit, pristine, reset, subm
           }}>
           Add
         </Button>
-        <Button onClick={handleHide} >Close</Button>
+        <Button onClick={handleHide}>
+          Close
+        </Button>
       </Modal.Footer>
     </form>
   </Modal>

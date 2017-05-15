@@ -13,6 +13,7 @@ const header = openNewProjectModal =>
       Add
     </Button>
   </div>
+
 const subHeader = (name, pid, key) =>
   <span>
     {name}
@@ -39,9 +40,14 @@ class UserProjects extends Component {
               key={i}
               header={subHeader(project.name, project.pid, i)}
               bsStyle="info" >
-              <Well bsStyle='sm'>{project.description}</Well>
+              <Well bsStyle='sm'>
+                {project.description}
+              </Well>
               <TimersContainer project={project} />
-              <UsersList users={users} uids={Object.keys(project.users)} />
+              <UsersList
+                users={users}
+                uids={Object.keys(project.users)}
+              />
             </Panel>
           )}
         </Panel>
